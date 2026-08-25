@@ -6,7 +6,8 @@ Division, Bangladesh - derivation and independent skill-score validation.
 **Target journal:** International Journal of Disaster Risk Reduction (IJDRR),
 Elsevier, Q1, IF ~4.5.
 
-**Authors:** Naimul Islam (CUET, corresponding), Nawshaba Ahmed (BRAC University).
+**Author:** Naimul Islam, Department of Civil Engineering, Chittagong
+University of Engineering and Technology (CUET), Chattogram 4349, Bangladesh.
 
 ---
 
@@ -17,7 +18,7 @@ sylhet_flash_flood_aa/
 ├── src/sylhet_aa/       Python package (analysis, viz, data, flood_mapping)
 ├── scripts/             Thin CLI entry points for each pipeline stage
 ├── gee/                 Google Earth Engine JavaScript export scripts
-├── data/raw/            Original inputs (CHIRPS CSV committed; others local)
+├── data/raw/            Original inputs (CSVs committed; TIFFs local only)
 ├── outputs/             Generated tables, figures, and stage artifacts
 ├── docs/                Master plan, reviewer defense, manuscript outline
 ├── tests/               Unit tests (pytest, 21 tests currently passing)
@@ -34,7 +35,7 @@ sylhet_flash_flood_aa/
 > First derivation and independent skill-score validation of rainfall-based
 > operational trigger thresholds for flash flood AA in Sylhet Division,
 > integrating 75 years of ERA5-Land (1950-2024), 44 years of CHIRPS
-> (1981-2024), Sentinel-1 SAR inundation for six flash flood events, and
+> (1981-2024), Sentinel-1 SAR inundation for seven flash flood events, and
 > FFWC gauge exceedance records - with POD, FAR, CSI, HSS, and ETS
 > evaluated on an independent 2011-2024 validation period.
 
@@ -69,9 +70,9 @@ pip install -e ".[dev]"
 # 4. Verify tests pass
 pytest tests/
 
-# 5. Run Stage A on the committed CHIRPS CSV
+# 5. Run Stage A on the committed CHIRPS CSV (GAUL polygon version)
 python scripts/01_run_stage_a_trends.py \
-    --input data/raw/sylhet_chirps_daily_1981_2024.csv \
+    --input data/raw/sylhet_chirps_daily_1981_2024_gaul.csv \
     --outdir outputs/stage_a
 
 # or with Make
@@ -89,13 +90,19 @@ directly (all shown in the Makefile).
 |---------|--------|----------|--------------|
 | CHIRPS v2.0 daily | 1981-2024 | UCSB Climate Hazards Group | GEE, `gee/01_chirps_daily_sylhet.js` |
 | ERA5-Land daily (Sylhet) | 1950-2024 | ECMWF Copernicus | GEE, `gee/02_era5land_daily_sylhet.js` |
-| ERA5-Land daily (trans-boundary) | 1950-2024 | ECMWF Copernicus | GEE, `gee/03_era5land_daily_transboundary.js` |
-| Sentinel-1 GRD IW VV | 2015-2024, 6 events | ESA Copernicus | GEE, `gee/04_sentinel1_flood_multievent.js` |
-| Sentinel-2 SR | Per event window | ESA Copernicus | GEE, `gee/05_sentinel2_validation.js` |
+| ERA5-Land daily (trans-boundary Barak-Meghna) | 1950-2024 | ECMWF Copernicus | GEE, `gee/03_era5land_daily_transboundary.js` |
+| Sentinel-1 GRD IW VV | 2015-2024, 7 events | ESA Copernicus | GEE, `gee/04_sentinel1_flood_multievent.js` |
+| Sentinel-2 SR + Landsat 8/9 | Per event window | ESA / USGS | GEE, `gee/05_sentinel2_validation.js` |
 | WorldPop 2020 | 2020 | University of Southampton | GEE / direct download |
 | ESA WorldCover 2021 | 2021 | ESA | GEE / direct download |
 | FFWC daily water levels | 1981-2024 | FFWC Bangladesh | Historical data request |
-| Flood events catalogue | 1981-2024 | EM-DAT / DDM / OCHA / IFRC / FFWC | Manual curation (see `data/raw/events_catalogue.template.csv`) |
+| Flood events catalogue | 1988-2024 | EM-DAT / DDM / OCHA / IFRC / FFWC | Manual curation, verification via EM-DAT |
+
+Study region definitions are anchored to authoritative sources:
+- Sylhet Division: FAO GAUL 2015 Level 1 administrative polygon
+- Trans-boundary Barak-Meghna catchment: India-WRIS (NRSC/CWC) official
+  Barak sub-basin extent, 89.5-94.5 deg E, 22.7-26.5 deg N
+- Robustness check: HydroBASINS Level 5 polygon (Lehner and Grill, 2013)
 
 ---
 
@@ -117,12 +124,12 @@ inputs in `data/raw/`. Nothing is fabricated or hard-coded.
 
 ## Current status
 
-- Stage A: DONE with real CHIRPS data. Findings in
-  `docs/05_stage_a_findings.md`.
-- Stage A ERA5 extension: GEE script ready, awaiting export.
-- Stage B: GEE scripts ready, awaiting export + Python postprocessing.
+- Stage A: DONE with real CHIRPS + ERA5 data. Three-dataset comparison
+  complete. See `docs/05_stage_a_findings.md`.
+- Stage B: DONE. Seven events assessed against S2 + L8/9 reference.
+  See `outputs/stage_b/`.
 - Stage C: Planned.
-- Stage D: Code ready, awaiting events catalogue and Stage B outputs.
+- Stage D: Code ready, awaiting EM-DAT-verified events catalogue.
 - Stage E: Planned.
 
 Full timeline in `docs/00_master_plan.md` Part 5. Estimated 24 weeks to
@@ -136,7 +143,7 @@ Read in this order:
 
 1. `STEP_BY_STEP.md` - what to do next, in order.
 2. `docs/00_master_plan.md` - overall plan, novelty, timeline.
-3. `docs/05_stage_a_findings.md` - critical Stage A briefing.
+3. `docs/05_stage_a_findings.md` - Stage A results synthesis.
 4. `docs/01_reviewer_defense.md` - anticipated Q1 reviewer questions.
 5. `docs/02_manuscript_outline.md` - IJDRR-formatted manuscript structure.
 6. `docs/03_em_registration.md` - Editorial Manager submission guide.
@@ -146,10 +153,10 @@ Read in this order:
 
 ## Contact
 
-- Naimul Islam: naimul.islam.bangladesh@gmail.com
-  ORCID: 0009-0002-3442-8980
-  Department of Civil Engineering, CUET, Chattogram 4349, Bangladesh
-- Nawshaba Ahmed: BRAC University, Dhaka, Bangladesh
+Naimul Islam
+naimul.islam.bangladesh@gmail.com
+ORCID: 0009-0002-3442-8980
+Department of Civil Engineering, CUET, Chattogram 4349, Bangladesh
 
 ---
 

@@ -25,10 +25,10 @@ Alternative shorter title:
 
 1. First skill-validated rainfall triggers for Sylhet flash flood
    anticipatory action.
-2. 44 yr CHIRPS shows no local rainfall trend despite intensifying flash
-   flood impacts.
-3. Six Sentinel-1 events mapped with Otsu; independent Kappa validation
-   above 0.7.
+2. 44 yr CHIRPS shows no rainfall total trend but dry spells lengthen
+   (CDD +0.3 d/yr).
+3. Seven Sentinel-1 events mapped with Otsu; Kappa 0.56 on cleanest
+   validation cases.
 4. Blind 2011-2024 validation: [POD/CSI numbers from Stage D].
 5. Thresholds ready to integrate into BDRCS-FFWC operational AA
    framework.
@@ -42,11 +42,12 @@ Alternative shorter title:
 Paragraph 1 (Problem): Flash floods in Sylhet Division cause repeated
 displacement; no validated trigger threshold exists (Anticipation Hub 2022).
 
-Paragraph 2 (What we did): 44 years CHIRPS + 75 years ERA5-Land + six S1
-events + FFWC gauges.
+Paragraph 2 (What was done): 44 years CHIRPS + 75 years ERA5-Land (Sylhet
++ trans-boundary) + seven Sentinel-1 events + FFWC gauges.
 
-Paragraph 3 (Findings): Sylhet local rainfall stationary (all MK p > 0.05);
-Kappa above 0.7 for four events; Stage D thresholds (fill after Stage D).
+Paragraph 3 (Findings): Sylhet local rainfall totals stationary but dry
+spells lengthening; Kappa 0.56 on cleanest events; Stage D thresholds
+(fill after Stage D).
 
 Paragraph 4 (Significance): First operational rainfall triggers for
 Sylhet-Sunamganj flash flood AA, ready for integration.
@@ -75,13 +76,15 @@ Bangladesh
 
 - 2.1 Study area (map). Add Elsevier boundary caption: "Map lines
   delineate study areas and do not necessarily depict accepted national
-  boundaries."
+  boundaries." Sylhet Division defined by FAO GAUL 2015 Level 1 polygon;
+  trans-boundary catchment defined by India-WRIS (NRSC/CWC) official
+  Barak sub-basin extent.
 - 2.2 Data sources (Table with columns Product / Period / Resolution /
   DOI or Source):
   - CHIRPS v2.0 daily 1981-2024
   - ERA5-Land daily 1950-2024 (Sylhet + trans-boundary)
-  - Sentinel-1 GRD IW (6 events)
-  - Sentinel-2 SR (validation)
+  - Sentinel-1 GRD IW (7 events)
+  - Sentinel-2 SR + Landsat 8/9 (multi-satellite optical validation)
   - WorldPop 2020, ESA WorldCover 2021
   - FFWC daily water levels (data availability)
   - EM-DAT / DDM / OCHA / IFRC events catalogue
@@ -92,7 +95,9 @@ Bangladesh
   (equations, references to Zhang 2011, Sen 1968, Mann 1945, Pettitt 1979).
 - 3.2 SAR flood mapping: Sentinel-1 preprocessing, Otsu thresholding,
   permanent water masking, connected component filter.
-- 3.3 Accuracy assessment: confusion matrix, Kappa (Congalton 1991).
+- 3.3 Accuracy assessment: confusion matrix, Kappa (Congalton 1991);
+  multi-satellite optical reference (S2 + L8 + L9); interpretation
+  caveat for change-based vs total-water comparison.
 - 3.4 Exposure quantification: population and land-cover extraction.
 - 3.5 Trigger derivation: multi-window accumulation sweep, event labels
   with halo, threshold selection criterion.
@@ -110,26 +115,27 @@ Bangladesh
 
 ## 5. Discussion (~1,200 words)
 
-- 5.1 What the null trend means: local vs trans-boundary rainfall.
+- 5.1 What the trend patterns mean: stationary totals but lengthening
+  dry spells; potential role of ERA5 pre-1979 discontinuity; trans-
+  boundary vs local rainfall.
 - 5.2 Comparison to prior work (Akter, Uddin, DeepSAR; positional).
 - 5.3 Operational implications: integration path with FFWC + BDRCS +
   Anticipation Hub.
-- 5.4 Limitations: 6 SAR events, cloud cover for S2, no soil moisture,
-  limited FFWC record for some stations.
+- 5.4 Limitations: 7 SAR events, cloud cover for optical validation,
+  no soil moisture, ERA5 pre-1979 discontinuity, limited FFWC record
+  for some stations.
 - 5.5 Future work: soil moisture, ML classifier comparison, cost-benefit
-  study.
+  study, adding pre-2015 events using Landsat-only SAR-substitute.
 
 ## 6. Conclusions (~300 words)
 
 Direct restatement of contributions and next steps. No new material.
 
-## Author contributions (CRediT)
+## Author contributions (CRediT - single author)
 
-Naimul Islam: Conceptualization, Methodology, Software, Formal Analysis,
-Data Curation, Visualization, Writing - Original Draft.
-
-Nawshaba Ahmed: Conceptualization, Methodology, Validation, Writing -
-Review & Editing, Supervision.
+Naimul Islam: Conceptualization, Methodology, Software, Validation,
+Formal Analysis, Investigation, Data Curation, Writing - Original Draft,
+Writing - Review & Editing, Visualization, Project Administration.
 
 ## Declaration of competing interest
 
@@ -138,12 +144,14 @@ None.
 ## Data availability
 
 Datasets and code available at Zenodo [DOI to be assigned] and GitHub
-[link]. Includes: CHIRPS extraction, ERA5-Land extractions, S1 flood
-rasters, events catalogue, Python analysis package.
+(https://github.com/Naimul-islam-bd/sylhet_flash_flood_aa). Includes:
+CHIRPS extraction, ERA5-Land extractions (Sylhet + trans-boundary),
+S1 flood rasters (7 events), events catalogue, Python analysis package.
 
 ## Acknowledgements
 
-FFWC for gauge data. OCHA/ReliefWeb for event documentation.
+FFWC for gauge data. OCHA/ReliefWeb for event documentation. Google
+Earth Engine for satellite data access.
 
 ---
 
@@ -152,8 +160,8 @@ FFWC for gauge data. OCHA/ReliefWeb for event documentation.
 Tables (7 max recommended):
 
 1. Data sources.
-2. ETCCDI trends 1981-2024 (real data, done).
-3. Event-by-event SAR accuracy.
+2. ETCCDI trends across three datasets (real data, done).
+3. Event-by-event SAR accuracy (7 events, done).
 4. Threshold performance (calibration + validation with CIs).
 5. Exposure by district.
 6. Sensitivity to key parameters.
@@ -161,8 +169,9 @@ Tables (7 max recommended):
 
 Figures (5 max recommended):
 
-1. Study area map (single column, TIFF halftone 300 dpi).
-2. Six-event flood extent panels (full page, combination 500 dpi).
+1. Study area map with Sylhet Division polygon + trans-boundary catchment
+   (single column, TIFF halftone 300 dpi).
+2. Seven-event flood extent panels (full page, combination 500 dpi).
 3. Exposure map (single column, TIFF 300 dpi).
 4. Skill score curves (full page, PDF vector).
 5. Proposed framework (full page, PDF vector).

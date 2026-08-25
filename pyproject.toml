@@ -11,7 +11,6 @@ requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
     { name = "Naimul Islam", email = "naimul.islam.bangladesh@gmail.com" },
-    { name = "Nawshaba Ahmed", email = "nawshaba@bracu.ac.bd" },
 ]
 keywords = [
     "flash flood", "anticipatory action", "CHIRPS", "Sentinel-1",
@@ -66,8 +65,8 @@ all = [
 ]
 
 [project.urls]
-Repository = "https://github.com/naimulislam/sylhet_aa"
-Documentation = "https://github.com/naimulislam/sylhet_aa#readme"
+Repository = "https://github.com/Naimul-islam-bd/sylhet_flash_flood_aa"
+Documentation = "https://github.com/Naimul-islam-bd/sylhet_flash_flood_aa#readme"
 
 [tool.setuptools.packages.find]
 where = ["src"]
