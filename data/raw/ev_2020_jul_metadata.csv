@@ -1,0 +1,2 @@
+system:index,event_id,evt_end,evt_scenes,evt_start,flood_area_km2,otsu_threshold_dB,pre_end,pre_scenes,pre_start,region_definition,.geo
+0,ev_2020_jul,2020-07-31,12,2020-06-25,447.5654619969317,-14.249704435794873,2020-06-20,2,2020-06-01,FAO GAUL 2015 Level 1 Sylhet Division,"{""type"":""MultiPoint"",""coordinates"":[]}"

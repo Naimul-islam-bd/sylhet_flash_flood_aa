@@ -1,0 +1,2 @@
+system:index,event_id,evt_end,evt_scenes,evt_start,flood_area_km2,otsu_threshold_dB,pre_end,pre_scenes,pre_start,region_definition,.geo
+0,ev_2017_apr,2017-05-15,12,2017-03-28,3157.221738785051,-13.74665572268611,2017-03-15,10,2017-02-01,FAO GAUL 2015 Level 1 Sylhet Division,"{""type"":""MultiPoint"",""coordinates"":[]}"

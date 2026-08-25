@@ -1,0 +1,27 @@
+event_date,end_date,source,notes
+# INSTRUCTIONS
+# ------------
+# Fill with REAL documented flash flood events in Sylhet Division.
+# Delete these header comment lines (starting with #) before Stage D.
+# One row per event. Dates in YYYY-MM-DD.
+# If end_date is unknown, leave blank (defaults to event_date).
+#
+# ALLOWED SOURCES (each event traceable to at least one):
+#   EM-DAT       - CRED, emdat.be (requires free registration)
+#   DDM          - Bangladesh Department of Disaster Management annual reports
+#   OCHA         - reliefweb.int situation reports
+#   IFRC         - ifrc.org DREF and appeal documents
+#   FFWC         - ffwc.gov.bd bulletins and annual reports
+#   Peer-review  - published papers with dated events
+#
+# DO NOT invent event dates. If you cannot verify from a source above,
+# do not include that row. Aim for 15-25 verified events across 1981-2024
+# for the threshold analysis to be statistically meaningful.
+#
+# STARTING EXAMPLES (verify each against the primary source before use):
+2017-04-01,2017-04-10,FFWC/OCHA,2017 pre-monsoon flash flood Sylhet-Sunamganj
+2019-07-10,2019-07-25,OCHA,2019 monsoon flash flood NE Bangladesh
+2020-07-11,2020-07-31,OCHA,2020 flash flood Sylhet-Sunamganj
+2022-05-15,2022-05-25,OCHA/Akter2023,2022 first wave May flash flood
+2022-06-15,2022-06-25,OCHA/IFRC,2022 catastrophic June flash flood
+2024-05-27,2024-07-31,OCHA-Aug2024,2024 eastern flash flood series

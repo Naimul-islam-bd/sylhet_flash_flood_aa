@@ -1,0 +1,2 @@
+system:index,cloud_max_scene_pct,event_id,evt_end,evt_start,l8_scenes,l9_scenes,reference_water_km2,region_definition,s2_scenes,total_scenes,.geo
+0,80,ev_2020_jul,2020-07-31,2020-06-25,2,0,825.770708475401,FAO GAUL 2015 Level 1 Sylhet Division,14,16,"{""type"":""MultiPoint"",""coordinates"":[]}"

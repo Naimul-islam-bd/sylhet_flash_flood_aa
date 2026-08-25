@@ -1,0 +1,2 @@
+event_id,TP,FP,TN,FN,overall_accuracy,producer_accuracy,user_accuracy,kappa,verdict
+ev_2022_jun,1612404,5723242,18589705,468725,0.7654031533439549,0.7747736925486118,0.21980395455287782,0.250364289280334,POOR - flag in Table 2

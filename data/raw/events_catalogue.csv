@@ -1,0 +1,19 @@
+event_date,end_date,source,notes
+1988-08-15,1988-09-15,Banglapedia; Rahman et al. ScienceDirect 2018,Catastrophic Aug-Sep 1988 flood - 60% Bangladesh inundated 2379 deaths nationwide; Sylhet mixed riverine+flash; date range approximate verify via EM-DAT
+1997-04-15,1997-04-30,IWA JWCC 2023 (Rahman/Kamruzzaman); Salauddin 2010,Sylhet haor pre-monsoon flash flood; year confirmed date approximate
+1998-07-15,1998-09-30,Banglapedia; Global Policy Institute 2022,Catastrophic 1998 flood - 70% area 918 deaths; Sylhet mixed; verify exact peak dates via EM-DAT
+2000-04-15,2000-04-30,IWA JWCC 2023; Dhaka Tribune 2024,Sylhet haor April flash flood driven by Meghalaya rainfall
+2002-04-15,2002-04-30,IWA JWCC 2023,Sylhet haor pre-monsoon flash flood; Sylhet >600mm rainfall
+2004-07-15,2004-08-15,Tandfonline HydrolProc 2026; Dhaka Tribune 2024,2004 flash+monsoon >1000mm rain in Sylhet; verify start date via EM-DAT
+2007-07-25,2007-09-15,Global Policy Institute; Rahman et al. 2018,2007 major flood 42% Bangladesh 1110 deaths nationwide; Sylhet major
+2010-04-15,2010-05-15,Dhaka Tribune 2024; IWA JWCC 2023,Sylhet flash flood pre-monsoon >600mm
+2012-06-25,2012-07-25,Tandfonline HydrolProc 2026,2012 major flood - 5148475 people affected 139 deaths Moulvibazar Sunamganj Habiganj Sylhet
+2015-04-15,2015-04-30,IWA JWCC 2023; Dhaka Tribune 2024,Sylhet haor April flash flood
+2016-04-15,2016-04-30,IWA JWCC 2023; Dhaka Tribune 2024,Sylhet haor April flash flood
+2017-03-28,2017-05-15,ReliefWeb/OCHA NAWG 2017; DDM,Catastrophic pre-monsoon flash flood - 4.67M affected 6 districts (Sylhet Sunamganj Habiganj Moulvibazar Netrokona Kishoreganj); 28000+ houses damaged 155018 ha cropland destroyed; Meghna Basin received 90% above avg rain in April
+2019-07-10,2019-07-25,IWA JWCC 2023; Dhaka Tribune 2024,Sylhet monsoon flash flood
+2020-06-25,2020-07-31,Global Policy Institute 2022; OCHA,Sylhet flash flood + monsoon combined
+2022-05-11,2022-05-25,ReliefWeb Briefing 25/05/2022; New Age 14/05/2022,Pre-monsoon flash flood - Sylhet+Sunamganj; Cherrapunji 972mm (highest in 122 years); power stations submerged from 17 May
+2022-06-15,2022-06-30,ReliefWeb Briefing 19/06/2022; IFRC,Catastrophic June flash flood - 7.2M affected in Sylhet+Sunamganj+adjoining districts; Cherrapunji 2500mm (highest in 100 years); electricity lost from 17 June; airport rail communication halted
+2023-05-10,2023-05-30,DDM (to verify via ReliefWeb); FFWC bulletins,Sylhet flash flood May 2023; date range to verify via EM-DAT/DDM primary source
+2024-05-27,2024-07-31,OCHA Aug 2024 sitrep; DDM,2024 eastern flash flood series; multi-wave May-July; verify individual peaks via FFWC bulletins
