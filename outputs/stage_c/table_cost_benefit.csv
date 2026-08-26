@@ -1,0 +1,8 @@
+event_id,exposed_population,estimated_households,aa_investment_usd_million,reconstruction_avoided_usd_million,avoided_damages_conservative_usd_M,avoided_damages_central_usd_M,avoided_damages_optimistic_usd_M,net_benefit_central_usd_M,bcr_central
+ev_2017_apr,1863361,414080,21.95,91.1,65.84,153.62,329.19,131.68,7.0
+ev_2019_jul,569534,126563,6.71,27.84,20.12,46.95,100.62,40.25,7.0
+ev_2020_jul,313781,69729,3.7,15.34,11.09,25.87,55.43,22.17,7.0
+ev_2022_may,1846046,410232,21.74,90.25,65.23,152.2,326.13,130.45,7.0
+ev_2022_jun,4011303,891401,47.24,196.11,141.73,330.71,708.66,283.47,7.0
+ev_2023_may,308536,68564,3.63,15.08,10.9,25.44,54.51,21.8,7.0
+ev_2024_jul,3400722,755716,40.05,166.26,120.16,280.37,600.79,240.32,7.0
