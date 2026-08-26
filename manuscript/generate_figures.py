@@ -1,21 +1,14 @@
 """
-generate_figures.py
-=====================
-Generate all 5 IJDRR-compliant figures for the manuscript.
-
-Compliance targets:
-  - PDF vector output (Figs 4, 5) or high-resolution PNG (Figs 1, 2, 3)
-  - Fonts embedded (pdf.fonttype = 42)
-  - Sans-serif family, minimum 7-point text
-  - Colorblind-safe palette (Tableau 10)
-  - Single-column width 3.54 inches; double-column width 7.48 inches
-  - Named as Figure_1.pdf, Figure_2.pdf, ... Figure_5.pdf
+generate_figures.py  (v2 - dual format output)
+================================================
+Generate all 5 IJDRR-compliant manuscript figures in BOTH formats:
+  - PDF (vector, for final IJDRR submission upload)
+  - JPG at 300 dpi (raster, for embedding in Word docx)
 
 Usage from project root:
-    python generate_figures.py --outdir outputs/figures
+    python manuscript\generate_figures.py --outdir outputs\figures
 
-Requires:
-    matplotlib, numpy, pandas, rasterio, cartopy (optional for Fig 1 basemap)
+Requires: matplotlib, numpy, pandas, rasterio
 """
 
 from __future__ import annotations
@@ -28,7 +21,7 @@ import pandas as pd
 
 # --- IJDRR-compliant matplotlib defaults ---
 mpl.rcParams.update({
-    "pdf.fonttype": 42,        # TrueType (embeddable) not Type 3
+    "pdf.fonttype": 42,
     "ps.fonttype": 42,
     "font.family": "sans-serif",
     "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans"],
@@ -45,7 +38,6 @@ mpl.rcParams.update({
     "axes.spines.right": False,
 })
 
-# Tableau 10 (colorblind-safe)
 COLORS = {
     "blue":    "#1f77b4",
     "orange":  "#ff7f0e",
@@ -57,31 +49,28 @@ COLORS = {
 }
 
 
+def save_both(fig, outdir: Path, stem: str, dpi_jpg=300):
+    """Save current figure as both PDF and JPG."""
+    pdf_path = outdir / f"{stem}.pdf"
+    jpg_path = outdir / f"{stem}.jpg"
+    fig.savefig(pdf_path, bbox_inches="tight")
+    fig.savefig(jpg_path, bbox_inches="tight", dpi=dpi_jpg, format="jpg")
+    print(f"  Wrote: {pdf_path.name}  +  {jpg_path.name}")
+
+
 # =====================================================================
 # FIGURE 1 - Study area map
 # =====================================================================
-def figure_1_study_area(outpath: Path) -> None:
-    """
-    Two-panel: (a) locator inset showing Bangladesh + neighbours,
-    (b) main study area with Sylhet Division polygon, four districts,
-       and trans-boundary Barak-Meghna catchment bounding box.
-
-    Uses simple lat/lon rectangles as placeholder outlines. If shapefiles
-    for GAUL polygons and districts are supplied, uncomment the geopandas
-    block to render true polygons.
-    """
+def figure_1_study_area(outdir: Path) -> None:
     fig = plt.figure(figsize=(7.48, 4.5))
     gs = fig.add_gridspec(1, 3, width_ratios=[1, 2, 0.03])
     ax_inset = fig.add_subplot(gs[0, 0])
     ax_main = fig.add_subplot(gs[0, 1])
 
-    # --- Inset: Bangladesh + neighbours ---
     ax_inset.set_xlim(87, 96)
     ax_inset.set_ylim(20, 27)
-    # Bangladesh rough rectangle
     ax_inset.add_patch(plt.Rectangle((88.0, 20.7), 4.6, 5.4,
                                       fill=False, edgecolor="black", linewidth=1))
-    # Sylhet Division rough rectangle
     ax_inset.add_patch(plt.Rectangle((90.9, 24.0), 1.5, 1.2,
                                       fill=True, facecolor=COLORS["red"],
                                       alpha=0.4, edgecolor="black", linewidth=0.8))
@@ -93,21 +82,17 @@ def figure_1_study_area(outpath: Path) -> None:
     ax_inset.set_ylabel("Latitude ($^\\circ$N)")
     ax_inset.grid(alpha=0.3)
 
-    # --- Main map: Sylhet Division + trans-boundary catchment ---
     ax_main.set_xlim(89.0, 95.0)
     ax_main.set_ylim(22.5, 26.5)
-    # Trans-boundary Barak-Meghna bounding box
     ax_main.add_patch(plt.Rectangle((89.5, 22.7), 4.5, 3.3,
                                      fill=True, facecolor=COLORS["blue"],
                                      alpha=0.15, edgecolor=COLORS["blue"],
                                      linewidth=1.5, linestyle="--",
                                      label="Trans-boundary Barak-Meghna"))
-    # Sylhet Division polygon (approximate)
     ax_main.add_patch(plt.Rectangle((90.9, 24.0), 1.6, 1.2,
                                      fill=True, facecolor=COLORS["red"],
                                      alpha=0.35, edgecolor="black", linewidth=1.2,
                                      label="Sylhet Division (FAO GAUL L1)"))
-    # 4 districts (approximate quadrants)
     districts = [
         ("Sunamganj",   90.9, 24.6, 0.8, 0.6),
         ("Sylhet",      91.7, 24.6, 0.8, 0.6),
@@ -130,25 +115,16 @@ def figure_1_study_area(outpath: Path) -> None:
     fig.text(0.5, -0.02,
              "Map lines delineate study areas and do not necessarily depict accepted national boundaries.",
              ha="center", fontsize=7, style="italic")
-
     plt.tight_layout()
-    plt.savefig(outpath, bbox_inches="tight", dpi=300)
+    save_both(fig, outdir, "Figure_1")
     plt.close()
-    print(f"  Wrote: {outpath}")
 
 
 # =====================================================================
 # FIGURE 2 - Three-dataset climate trends
 # =====================================================================
-def figure_2_trends(outdir: Path, outpath: Path) -> None:
-    """
-    Three-panel: pre-monsoon PRCPTOT series with Sen slopes for
-    CHIRPS 1981-2024, ERA5 Sylhet 1950-2024, ERA5 trans-boundary 1950-2024.
-
-    Reads from your Stage A outputs. Adjust paths if different.
-    """
+def figure_2_trends(outdir: Path) -> None:
     fig, axes = plt.subplots(1, 3, figsize=(7.48, 3.0), sharey=False)
-
     datasets = [
         ("CHIRPS Sylhet 1981-2024",
          Path("outputs/stage_a/annual_indices.csv"),
@@ -160,18 +136,15 @@ def figure_2_trends(outdir: Path, outpath: Path) -> None:
          Path("outputs/stage_a_transboundary/annual_indices.csv"),
          COLORS["green"], "-3.87 mm/yr, p=0.012"),
     ]
-
     for ax, (label, path, color, slope_label) in zip(axes, datasets):
         if path.exists():
             df = pd.read_csv(path)
-            # Look for pre-monsoon column (may differ by naming)
             pm_col = [c for c in df.columns if "premonsoon" in c.lower()
                        or "pre_monsoon" in c.lower() or "MAM" in c]
             if pm_col:
                 y = df[pm_col[0]].values
                 x = df["year"].values if "year" in df.columns else np.arange(len(y)) + df.index.min()
                 ax.plot(x, y, color=color, linewidth=1.0, alpha=0.7)
-                # Fit line
                 mask = ~np.isnan(y)
                 if mask.sum() > 5:
                     slope, intercept = np.polyfit(x[mask], y[mask], 1)
@@ -180,7 +153,6 @@ def figure_2_trends(outdir: Path, outpath: Path) -> None:
         else:
             ax.text(0.5, 0.5, f"Missing:\n{path.name}", ha="center", va="center",
                      transform=ax.transAxes, fontsize=8, color="gray")
-
         ax.set_title(label, fontsize=8)
         ax.set_xlabel("Year")
         ax.set_ylabel("Pre-monsoon rainfall (mm)")
@@ -189,29 +161,22 @@ def figure_2_trends(outdir: Path, outpath: Path) -> None:
                 bbox=dict(boxstyle="round,pad=0.3", facecolor="white",
                            edgecolor="gray", alpha=0.8))
         ax.grid(alpha=0.3)
-
     fig.suptitle("Figure 2. Pre-monsoon rainfall trends across three datasets",
                  fontweight="bold", y=1.02)
     plt.tight_layout()
-    plt.savefig(outpath, bbox_inches="tight", dpi=300)
+    save_both(fig, outdir, "Figure_2")
     plt.close()
-    print(f"  Wrote: {outpath}")
 
 
 # =====================================================================
 # FIGURE 3 - Seven-event flood extent panels
 # =====================================================================
-def figure_3_flood_panels(outpath: Path) -> None:
-    """
-    2x4 grid: 7 event flood extents (last panel empty or legend).
-    Reads flood extent TIFs from data/raw/.
-    """
+def figure_3_flood_panels(outdir: Path) -> None:
     try:
         import rasterio
     except ImportError:
         print("  rasterio not installed - skipping Fig 3")
         return
-
     events = [
         ("2017 April",   "data/raw/ev_2017_apr_flood_extent.tif", 3157),
         ("2019 July",    "data/raw/ev_2019_jul_flood_extent.tif", 965),
@@ -221,10 +186,8 @@ def figure_3_flood_panels(outpath: Path) -> None:
         ("2023 May",     "data/raw/ev_2023_may_flood_extent.tif", 422),
         ("2024 July",    "data/raw/ev_2024_jul_flood_extent.tif", 5292),
     ]
-
     fig, axes = plt.subplots(2, 4, figsize=(7.48, 4.5))
     axes = axes.flatten()
-
     for ax, (label, path, area) in zip(axes[:7], events):
         p = Path(path)
         if p.exists():
@@ -235,11 +198,8 @@ def figure_3_flood_panels(outpath: Path) -> None:
             ax.text(0.5, 0.5, "missing", ha="center", va="center",
                      transform=ax.transAxes, color="gray")
         ax.set_title(f"{label}\n{area} km$^2$", fontsize=8)
-        ax.set_xticks([])
-        ax.set_yticks([])
+        ax.set_xticks([]); ax.set_yticks([])
         ax.spines[:].set_visible(False)
-
-    # Empty last panel with legend
     axes[7].axis("off")
     axes[7].text(0.05, 0.95, "Sentinel-1 GRD IW VV\nOtsu threshold",
                   transform=axes[7].transAxes, fontsize=8,
@@ -254,28 +214,18 @@ def figure_3_flood_panels(outpath: Path) -> None:
                                      transform=axes[7].transAxes))
     axes[7].text(0.3, 0.37, "Non-flood", transform=axes[7].transAxes,
                   fontsize=7, verticalalignment="center")
-
     fig.suptitle("Figure 3. Sentinel-1 SAR flood extents for seven documented events",
                  fontweight="bold", y=1.00)
     plt.tight_layout()
-    plt.savefig(outpath, bbox_inches="tight", dpi=500)
+    save_both(fig, outdir, "Figure_3", dpi_jpg=500)
     plt.close()
-    print(f"  Wrote: {outpath}")
 
 
 # =====================================================================
 # FIGURE 4 - Skill diagnostics
 # =====================================================================
-def figure_4_skill_diagnostics(outdir: Path, outpath: Path) -> None:
-    """
-    Four-panel: (a) CSI vs threshold per window, (b) HSS vs threshold,
-    (c) ROC per window, (d) validation CSI with 95% CI.
-    Reads Stage D sweep outputs.
-    """
+def figure_4_skill_diagnostics(outdir: Path) -> None:
     fig, axes = plt.subplots(2, 2, figsize=(7.48, 5.5))
-
-    # ------ Panel (a) CSI vs threshold ------
-    # Try multiple candidate paths (Stage D can be run with several output dirs)
     candidates = [
         Path("outputs/stage_d/sweep_calibration.csv"),
         Path("outputs/stage_d_final_premonsoon/sweep_calibration.csv"),
@@ -298,7 +248,6 @@ def figure_4_skill_diagnostics(outdir: Path, outpath: Path) -> None:
     axes[0, 0].legend(loc="best", fontsize=7)
     axes[0, 0].grid(alpha=0.3)
 
-    # ------ Panel (b) HSS vs threshold ------
     if sweep_path:
         for w, c in zip([1, 2, 3, 5, 7],
                         [COLORS["blue"], COLORS["orange"], COLORS["green"],
@@ -312,7 +261,6 @@ def figure_4_skill_diagnostics(outdir: Path, outpath: Path) -> None:
     axes[0, 1].legend(loc="best", fontsize=7)
     axes[0, 1].grid(alpha=0.3)
 
-    # ------ Panel (c) ROC curves ------
     if sweep_path:
         for w, c in zip([1, 2, 3, 5, 7],
                         [COLORS["blue"], COLORS["orange"], COLORS["green"],
@@ -325,22 +273,14 @@ def figure_4_skill_diagnostics(outdir: Path, outpath: Path) -> None:
     axes[1, 0].set_xlabel("False alarm ratio")
     axes[1, 0].set_ylabel("Probability of detection")
     axes[1, 0].set_title("(c) ROC curves per window")
-    axes[1, 0].set_xlim(0, 1)
-    axes[1, 0].set_ylim(0, 1)
+    axes[1, 0].set_xlim(0, 1); axes[1, 0].set_ylim(0, 1)
     axes[1, 0].legend(loc="lower right", fontsize=7)
     axes[1, 0].grid(alpha=0.3)
 
-    # ------ Panel (d) Validation CSI with CIs ------
-    # Hard-coded from final Table 4 season-stratified results
     seasons = ["Pre-monsoon\n(3-d ≥ 19 mm)\nTrans-boundary",
                 "Monsoon\n(7-d ≥ 206 mm)\nLocal Sylhet"]
-    csi = [0.196, 0.163]
-    csi_lo = [0.134, 0.110]
-    csi_hi = [0.253, 0.220]
-    pod = [0.627, 0.347]
-    pod_lo = [0.512, 0.253]
-    pod_hi = [0.744, 0.451]
-
+    csi = [0.196, 0.163]; csi_lo = [0.134, 0.110]; csi_hi = [0.253, 0.220]
+    pod = [0.627, 0.347]; pod_lo = [0.512, 0.253]; pod_hi = [0.744, 0.451]
     x = np.arange(len(seasons))
     width = 0.35
     axes[1, 1].bar(x - width/2, csi, width,
@@ -364,24 +304,17 @@ def figure_4_skill_diagnostics(outdir: Path, outpath: Path) -> None:
     fig.suptitle("Figure 4. Skill diagnostics for season-stratified rainfall triggers",
                  fontweight="bold", y=1.00)
     plt.tight_layout()
-    plt.savefig(outpath, bbox_inches="tight")
+    save_both(fig, outdir, "Figure_4")
     plt.close()
-    print(f"  Wrote: {outpath}")
 
 
 # =====================================================================
 # FIGURE 5 - Proposed framework (4-layer)
 # =====================================================================
-def figure_5_framework(outpath: Path) -> None:
-    """
-    Four horizontal layers: Monitoring, Trigger, Action, Impact.
-    """
+def figure_5_framework(outdir: Path) -> None:
     from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
-
     fig, ax = plt.subplots(figsize=(7.48, 8.0))
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 12)
-    ax.set_axis_off()
+    ax.set_xlim(0, 10); ax.set_ylim(0, 12); ax.set_axis_off()
 
     layer_colors = [COLORS["blue"], COLORS["orange"], COLORS["green"], COLORS["red"]]
     layer_labels = ["MONITORING", "TRIGGER", "ANTICIPATORY ACTION", "IMPACT"]
@@ -402,12 +335,10 @@ def figure_5_framework(outpath: Path) -> None:
                              color="black", linewidth=2)
         ax.add_patch(a)
 
-    # --- Layer labels on left ---
     for label, y, color in zip(layer_labels, layer_y, layer_colors):
         ax.text(0.05, y + 0.6, label, fontsize=9, fontweight="bold",
                 color=color, va="center")
 
-    # --- Layer 1: Monitoring (4 boxes) ---
     labels_L1 = [
         "Trans-boundary\nrainfall\n(ERA5-Land, 9 km)",
         "Sylhet local\nrainfall\n(CHIRPS, 5.5 km)",
@@ -417,7 +348,6 @@ def figure_5_framework(outpath: Path) -> None:
     for i, t in enumerate(labels_L1):
         box(0.6 + i*2.3, layer_y[0], 2.0, 1.2, t, layer_colors[0], fs=6.5)
 
-    # --- Layer 2: Trigger (2 boxes) ---
     box(0.9, layer_y[1], 4.0, 1.7,
         "PRE-MONSOON (Mar-May)\n\nTrans-boundary 3-day\nrainfall ≥ 19 mm\n\nPOD 0.63 [0.51-0.74]\nCSI 0.20  |  HSS 0.32",
         layer_colors[1], fs=7)
@@ -425,7 +355,6 @@ def figure_5_framework(outpath: Path) -> None:
         "MONSOON (Jun-Sep)\n\nLocal Sylhet 7-day\nrainfall ≥ 206 mm\n\nPOD 0.35 [0.25-0.45]\nCSI 0.16  |  HSS 0.27",
         layer_colors[1], fs=7)
 
-    # --- Layer 3: Anticipatory Action (5 boxes) ---
     labels_L3 = [
         "Cash transfer\nBDT 4,500 per\nhousehold",
         "Livestock\nevacuation to\nhigher ground",
@@ -436,18 +365,15 @@ def figure_5_framework(outpath: Path) -> None:
     for i, t in enumerate(labels_L3):
         box(0.4 + i*1.9, layer_y[2], 1.7, 1.6, t, layer_colors[2], fs=6.5)
 
-    # --- Layer 4: Impact (single wide box) ---
     box(0.6, layer_y[3], 8.6, 1.3,
         "Reduced flash flood impact for 4-7 million people at risk in Sylhet Division\n"
         "Estimated benefit-cost ratio 7:1  |  ~USD 1 billion damages avoidable across 7 events",
         layer_colors[3], fs=8)
 
-    # --- Arrows between layers ---
     arrow(layer_y[0], layer_y[1] + 1.7)
     arrow(layer_y[1], layer_y[2] + 1.6)
     arrow(layer_y[2], layer_y[3] + 1.3)
 
-    # --- Title + caption ---
     ax.text(5, 11.6,
             "Figure 5. Proposed framework for flash flood anticipatory action\nin Sylhet Division, Bangladesh",
             ha="center", fontsize=10, fontweight="bold")
@@ -456,31 +382,23 @@ def figure_5_framework(outpath: Path) -> None:
             "Anticipatory action interventions and unit costs adapted from Bangladesh Red Crescent Society Jamuna programme (2020).\n"
             "Impact estimate combines Stage C exposure (Table 5) with return-on-investment multiplier 7:1 (FAO/WFP/OCHA 2025).",
             ha="center", fontsize=6, style="italic")
-
-    plt.savefig(outpath, bbox_inches="tight")
+    save_both(fig, outdir, "Figure_5")
     plt.close()
-    print(f"  Wrote: {outpath}")
 
 
-# =====================================================================
-# Main
-# =====================================================================
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Generate IJDRR manuscript figures")
-    ap.add_argument("--outdir", default="outputs/figures",
-                    help="Output directory for PDF/PNG figures")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--outdir", default="outputs/figures")
     args = ap.parse_args()
-
     outdir = Path(args.outdir)
     outdir.mkdir(parents=True, exist_ok=True)
-
-    print("Generating IJDRR-compliant manuscript figures ...")
-    figure_1_study_area(outdir / "Figure_1.pdf")
-    figure_2_trends(outdir, outdir / "Figure_2.pdf")
-    figure_3_flood_panels(outdir / "Figure_3.pdf")
-    figure_4_skill_diagnostics(outdir, outdir / "Figure_4.pdf")
-    figure_5_framework(outdir / "Figure_5.pdf")
-    print("\nAll figures written to:", outdir.resolve())
+    print("Generating IJDRR figures (PDF + JPG dual output) ...")
+    figure_1_study_area(outdir)
+    figure_2_trends(outdir)
+    figure_3_flood_panels(outdir)
+    figure_4_skill_diagnostics(outdir)
+    figure_5_framework(outdir)
+    print(f"\nAll figures written to: {outdir.resolve()}")
     return 0
 
 
