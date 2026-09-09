@@ -1,2 +1,0 @@
-event_id,TP,FP,TN,FN,overall_accuracy,producer_accuracy,user_accuracy,kappa,verdict
-ev_2020_jul,13012,538051,24840199,1002814,0.9416208015768387,0.01280928032950525,0.023612545208079656,-0.010753500679042115,POOR - flag in Table 2
