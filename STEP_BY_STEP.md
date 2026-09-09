@@ -116,27 +116,7 @@ Same values ashle Stage A verified.
 
 ---
 
-## STEP 5 - Nawshaba ke pathao
 
-Ei do ta file share koro:
-
-1. `docs/05_stage_a_findings.md` - critical briefing.
-2. `docs/00_master_plan.md` - full plan (mainly Part 4).
-
-Message text (email ba WhatsApp):
-
-> "Nawshaba, real CHIRPS 1981-2024 trend analysis run kore dekhlam Sylhet
-> local rainfall e KONO significant trend nai (all MK p > 0.05,
-> Sen's slope pre-monsoon -3.5 mm/yr). Conference paper er +7.7 mm/yr
-> claim ta wrong chilo. Proposed reframing: local rainfall stationary,
-> tai flash flood barche trans-boundary Meghalaya-Assam rainfall +
-> exposure change theke - which supports the paper's case for validated
-> multi-source triggers. Please confirm you agree before I move to
-> Stage B. Details attached: docs/05_stage_a_findings.md."
-
-Waiting for her reply. Meantime STEP 6 shuru koro.
-
----
 
 ## STEP 6 - GEE scripts run koro (5 tas)
 
