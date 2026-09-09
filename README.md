@@ -14,15 +14,10 @@ sylhet_flash_flood_aa/
 ├── scripts/                 Thin CLI entry points for each pipeline stage
 ├── gee/                     Google Earth Engine JavaScript export scripts
 ├── data/raw/                Original inputs (CSVs committed; TIFFs local only)
-├── outputs/                 Generated tables, figures, and stage artifacts
-├── supplementary_figures/   Supplementary figures for the manuscript
-├── manuscript/              Submission-ready docx files and figure generation code
-├── docs/                    Master plan, reviewer defense, manuscript outline
 ├── tests/                   Unit tests (pytest, 21 tests currently passing)
 ├── notebooks/               Exploratory Jupyter notebooks
 ├── pyproject.toml           Package definition and dependencies
 ├── Makefile                 Common pipeline commands
-└── STEP_BY_STEP.md          Guided walkthrough for the whole workflow
 ```
 
 ## Novel contribution
@@ -97,16 +92,6 @@ Windows users without `make` can run the underlying Python commands directly (al
 - Trans-boundary Barak-Meghna catchment: India-WRIS (NRSC/CWC) official Barak sub-basin extent, 89.5-94.5 deg E, 22.7-26.5 deg N
 - Robustness check: HydroBASINS Level 5 polygon (Lehner and Grill, 2013)
 
-## Reproducing the results
-
-```bash
-make test           # 21 unit tests
-make stage-a        # trends + Fig 1 + Fig 1b (CHIRPS)
-make stage-a-era5   # trends on ERA5-Land 1950-2024 (needs GEE export first)
-make stage-b        # multi-event flood accuracy (needs S1 and S2 rasters)
-make stage-c        # exposure quantification (WorldPop + WorldCover)
-make stage-d        # trigger threshold derivation and validation
-make figures        # regenerate all publication-quality figures
 ```
 
 Every number in the paper is reproducible from these scripts and the raw inputs in `data/raw/`. Nothing is fabricated or hard-coded.
@@ -118,24 +103,12 @@ Every number in the paper is reproducible from these scripts and the raw inputs 
 - **Stage C** (WorldPop + ESA WorldCover exposure): DONE. 2022 June peak exposure 4.01 million people, Sunamganj dominant. See `outputs/stage_c/`.
 - **Stage C enhancements** (district breakdown + cost-benefit): DONE. BCR 7:1, approximately USD 1 billion avoidable damages across 7 events.
 - **Stage D** (season-stratified triggers): DONE. Pre-monsoon POD 0.63, monsoon POD 0.35, both blind-validated on 2011-2024.
-- **Stage E** (framework figure + manuscript): DONE. All 5 main figures and 3 supplementary figures generated. Manuscript ready in `manuscript/` folder.
+- **Stage E** (framework figure + manuscript): DONE. All 5 main figures and 3 supplementary figures generated. Manuscript ready .
 
 **Submission status:**
 - **First submission** (IJDRR, Ms. No. IJDRR-D-26-02732): Desk-rejected on 31 August 2026 by Editor-in-Chief Carmine Galasso. Rejection cited insufficient methodological novelty for the journal's international readership priorities, not technical concerns.
 - **Current submission** (Climate Risk Management, Elsevier): Submission package prepared with reframing toward climate risk management scope (seasonal forecasting application, benefit-cost analysis, monitoring and evaluation).
 
-Full timeline in `docs/00_master_plan.md` Part 5.
-
-## Documentation
-
-Read in this order:
-
-1. `STEP_BY_STEP.md` - what to do next, in order.
-2. `docs/00_master_plan.md` - overall plan, novelty, timeline.
-3. `docs/05_stage_a_findings.md` - Stage A results synthesis.
-4. `docs/01_reviewer_defense.md` - anticipated Q1 reviewer questions.
-5. `docs/02_manuscript_outline.md` - manuscript structure.
-6. `manuscript/README.md` - CRM submission package deployment guide.
 
 ## Contact
 
